@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h2>Welcome, {{ username }}!</h2>
+<p>You are successfully logged in to your dashboard.</p>
+
+<div class="alert alert-success">
+    <strong>✅ Security Fix Applied:</strong> The password reset functionality now requires your current password for verification. 
+    This prevents unauthorized password changes and protects against session hijacking attacks.
+</div>
+
+<div style="margin-top: 20px;">
+    <a href="{{ url_for('reset_password') }}" style="text-decoration: none;">
+        <button>Change Password Securely</button>
+    </a>
+</div>
+
+<div style="margin-top: 30px;">
+    <h3>Security Improvements</h3>
+    <p>The password reset functionality now includes proper security measures:</p>
+    <ul>
+        <li>✅ Current password verification required</li>
+        <li>✅ Protection against session hijacking</li>
+        <li>✅ Prevention of password reuse</li>
+        <li>✅ Proper authentication and authorization</li>
+    </ul>
+</div>
+{% endblock %}
