@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="vulnerability-warning">
+    <strong>⚠️ Security Demo:</strong> This application demonstrates a password reset vulnerability. 
+    The current implementation allows password changes without verifying the existing password.
+</div>
+
+<h2>Welcome to the Password Reset Demo</h2>
+<p>This application demonstrates a common security vulnerability in password reset functionality.</p>
+
+{% if not session.user_id %}
+<h3>Test Accounts</h3>
+<p>Use one of these accounts to test the password reset functionality:</p>
+<ul>
+    <li><strong>Username:</strong> admin, <strong>Password:</strong> admin123</li>
+    <li><strong>Username:</strong> user1, <strong>Password:</strong> password123</li>
+</ul>
+
+<div style="margin-top: 30px;">
+    <a href="{{ url_for('login') }}" style="text-decoration: none;">
+        <button>Login to Test</button>
+    </a>
+</div>
+{% else %}
+<h3>You are logged in!</h3>
+<p>Now you can test the password reset functionality. Notice that it doesn't ask for your current password!</p>
+
+<div style="margin-top: 20px;">
+    <a href="{{ url_for('reset_password') }}" style="text-decoration: none;">
+        <button class="btn-danger">Reset Password (Vulnerable)</button>
+    </a>
+</div>
+{% endif %}
+{% endblock %}

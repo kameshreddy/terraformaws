@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<h2>Welcome, {{ username }}!</h2>
+<p>You are successfully logged in to your dashboard.</p>
+
+<div class="vulnerability-warning">
+    <strong>⚠️ Vulnerability Test:</strong> Try resetting your password using the button below. 
+    Notice that the system doesn't ask for your current password - this is a security vulnerability!
+</div>
+
+<div style="margin-top: 20px;">
+    <a href="{{ url_for('reset_password') }}" style="text-decoration: none;">
+        <button class="btn-danger">Reset Password</button>
+    </a>
+</div>
+
+<div style="margin-top: 30px;">
+    <h3>Security Issue Demonstration</h3>
+    <p>The current password reset functionality has a critical security flaw:</p>
+    <ul>
+        <li>❌ No verification of existing/current password</li>
+        <li>❌ Anyone with access to the session can change the password</li>
+        <li>❌ No additional authentication required</li>
+    </ul>
+</div>
+{% endblock %}
