@@ -57,29 +57,41 @@ def logout():
 
 @app.route('/reset-password', methods=['GET', 'POST'])
 def reset_password():
-    """VULNERABLE: Reset password without verifying existing password"""
+    """SECURE: Reset password with existing password verification"""
     if 'user_id' not in session:
         flash('Please login first.', 'error')
         return redirect(url_for('login'))
     
     if request.method == 'POST':
+        current_password = request.form.get('current_password', '')
         new_password = request.form['new_password']
         confirm_password = request.form['confirm_password']
         
+        # SECURITY FIX: Verify existing password before allowing password change
+        username = session['username']
+        user = users_db[username]
+        
+        if not check_password_hash(user['password_hash'], current_password):
+            flash('Current password is incorrect!', 'error')
+            return render_template('reset_password.html')
+        
         if new_password != confirm_password:
-            flash('Passwords do not match!', 'error')
+            flash('New passwords do not match!', 'error')
             return render_template('reset_password.html')
         
         if len(new_password) < 6:
             flash('Password must be at least 6 characters long!', 'error')
             return render_template('reset_password.html')
         
-        # VULNERABILITY: No verification of existing password!
-        # This allows anyone with access to the session to change the password
-        username = session['username']
+        # Additional security check: prevent reusing the same password
+        if check_password_hash(user['password_hash'], new_password):
+            flash('New password must be different from current password!', 'error')
+            return render_template('reset_password.html')
+        
+        # Now it's safe to update the password
         users_db[username]['password_hash'] = generate_password_hash(new_password)
         
-        flash('Password reset successful!', 'success')
+        flash('Password updated successfully!', 'success')
         return redirect(url_for('index'))
     
     return render_template('reset_password.html')
